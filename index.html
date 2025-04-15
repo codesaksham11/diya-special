@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Diya!</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        #countdown {
+            font-size: 100px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+        #birthday-message {
+            display: none;
+            text-align: center;
+            color: white;
+            animation: fadeIn 2s ease-in;
+        }
+        #birthday-message h1 {
+            font-size: 60px;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #birthday-message p {
+            font-size: 24px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        #birthday-message img {
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">10</div>
+    <div id="birthday-message">
+        <h1>Happy Birthday, Diya!</h1>
+        <p>You're not just my favorite cousin—you're a total superstar! Today’s all about celebrating you and the joy you bring to everyone. Here’s to adventures, laughs, and making more unforgettable memories together. Love you tons!</p>
+        <img src="diya.jpg" alt="Diya's Photo">
+    </div>
+    <canvas id="confetti"></canvas>
+
+    <script>
+        let count = 10;
+        const countdownEl = document.getElementById('countdown');
+        const messageEl = document.getElementById('birthday-message');
+
+        const countdown = setInterval(() => {
+            count--;
+            countdownEl.textContent = count;
+            countdownEl.style.transform = `scale(${1 + count / 50})`;
+            if (count === 0) {
+                clearInterval(countdown);
+                countdownEl.style.display = 'none';
+                messageEl.style.display = 'block';
+                startConfetti();
+            }
+        }, 1000);
+
+        // Confetti effect
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const confetti = [];
+        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#ff9f43'];
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                confetti.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    speed: Math.random() * 5 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                });
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach((c, i) => {
+                c.y += c.speed;
+                if (c.y > canvas.height) c.y = -c.size;
+                ctx.fillStyle = c.color;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        function startConfetti() {
+            createConfetti();
+            animateConfetti();
+        }
+    </script>
+</body>
+</html>
